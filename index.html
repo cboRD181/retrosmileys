@@ -39,7 +39,7 @@
             height: 150px; /* Adjust this value to set a fixed height for the image container */
         }
         .smiley-code {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
             margin-top: 5px;
         }
@@ -162,7 +162,15 @@
             applyDarkModePreference();
             document.getElementById('darkModeToggle').addEventListener('change', toggleDarkMode);
         });
-        
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+
         function searchSmiley() {
             const searchInput = document.getElementById('search-input');
             const searchText = searchInput.value.trim().toLowerCase();
@@ -177,6 +185,11 @@
                 }
             });
         }
+
+        const debouncedSearchSmiley = debounce(searchSmiley, 300);
+
+        document.getElementById('search-input').addEventListener('input', debouncedSearchSmiley);
+        
     </script>
 </head>
 <body>
