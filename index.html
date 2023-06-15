@@ -1,6 +1,5 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,7 +35,7 @@
             flex-grow: 1;
             display: flex;
             align-items: center;
-	    justify-content: center;
+            justify-content: center;
             height: 150px; /* Adjust this value to set a fixed height for the image container */
         }
         .smiley-code {
@@ -48,12 +47,159 @@
             max-width: 100%;
             max-height: 100%;
         }
+        /* Dark mode styles */
+        html[data-theme='dark'] body {
+            background-color: #111111;
+            color: #ffffff;
+        }
+        /* Search bar styles */
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        /* Dark mode toggle styles */
+        .dark-mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        /* The switch - the box around the slider */
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 40px;
+          height: 20px;
+        }
+        /* Hide default HTML checkbox */
+        .switch input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+        /* The slider */
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ccc;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 18px;
+          width: 18px;
+          left: 1px;
+          bottom: 1px;
+          background-color: white;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+        input:checked + .slider {
+          background-color: #313436;
+        }
+        input:focus + .slider {
+          box-shadow: 0 0 1px #404346;
+        }
+        input:checked + .slider:before {
+          -webkit-transform: translateX(20px);
+          -ms-transform: translateX(20px);
+          transform: translateX(20px);
+        }
+        /* Rounded sliders */
+        .slider.round {
+          border-radius: 34px;
+        }
+        .slider.round:before {
+          border-radius: 50%;
+        }
     </style>
+    <script>
+        function toggleDarkMode() {
+            const logo = document.getElementById('logo');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            if (document.documentElement.getAttribute('data-theme') === 'light') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                logo.src = 'https://i.imgur.com/Igl2HgE.png';
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                logo.src = 'https://i.imgur.com/Tg9Qhyk.png';
+                localStorage.setItem('darkMode', 'false');
+            }
+        }
+
+        function applyDarkModePreference() {
+            const darkMode = localStorage.getItem('darkMode');
+            const logo = document.getElementById('logo');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            if (darkMode === 'true') {
+                document.body.classList.add('dark-mode');
+                logo.src = 'https://i.imgur.com/Igl2HgE.png';
+                darkModeToggle.checked = true;
+            } else {
+                document.body.classList.remove('dark-mode');
+                logo.src = 'https://i.imgur.com/Tg9Qhyk.png';
+                darkModeToggle.checked = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            applyDarkModePreference();
+            document.getElementById('darkModeToggle').addEventListener('change', toggleDarkMode);
+        });
+        
+        function searchSmiley() {
+            const searchInput = document.getElementById('search-input');
+            const searchText = searchInput.value.trim().toLowerCase();
+            const smileyCodes = document.querySelectorAll('.smiley-code');
+            smileyCodes.forEach(codeElement => {
+                const code = codeElement.innerText.trim().toLowerCase();
+                const gridItem = codeElement.parentElement;
+                if (code.includes(searchText)) {
+                    gridItem.style.display = 'flex';
+                } else {
+                    gridItem.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </head>
 <body>
-    <h1><img src="https://i.imgur.com/Tg9Qhyk.png" alt="Logo"></h1>
+    <script>
+      const darkMode = localStorage.getItem('darkMode');
+      if (darkMode === 'true') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    </script>  
+    <div class="dark-mode-toggle">
+        <span class="moon-label">🌙</span>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    <h1><img id="logo" src="https://i.imgur.com/Tg9Qhyk.png" alt="Logo"></h1>
+    <div class="search-container">
+        <input id="search-input" class="search-input" type="text" placeholder="Search smiley by code..." oninput="searchSmiley()">
+    </div>
     <div class="grid-container">
-
         <div class="grid-item">
             <div class="image-container">
                 <img src="https://www.kanyetothe.com/d3/Smileys/default/Eg5JVIL.gif" alt=";agreed;">
